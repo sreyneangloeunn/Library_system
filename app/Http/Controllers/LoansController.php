@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LibraryController;
+use App\Models\Loans;
 use Illuminate\Http\Request;
 
-class LibraryControllerController extends Controller
+class LoansController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +26,7 @@ class LibraryControllerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LibraryController $libraryController)
+    public function show(Loans $loans)
     {
         //
     }
@@ -34,7 +34,7 @@ class LibraryControllerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LibraryController $libraryController)
+    public function update(Request $request, Loans $loans)
     {
         //
     }
@@ -42,7 +42,7 @@ class LibraryControllerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LibraryController $libraryController)
+    public function destroy(Loans $loans)
     {
         //
     }
