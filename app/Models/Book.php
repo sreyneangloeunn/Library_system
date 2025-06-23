@@ -23,7 +23,12 @@ class Book extends Model
 
     public function loan()
     {
-        return $this->hasMany(Loan::class);
+        return $this->hasMany(Loans::class);
     }
+
+    protected $hidden =[
+        'created_at',
+        'updated_at'
+    ];
 }
 

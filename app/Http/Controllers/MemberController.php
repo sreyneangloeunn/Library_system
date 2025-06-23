@@ -12,7 +12,7 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        return Member::all();
     }
 
     /**
@@ -20,7 +20,17 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $member = new Member();
+        $member->name= $request->input('name');
+        $member->email= $request->input('email');
+        $member->phone= $request->input('phone');
+        $member->membership_date= $request->input('membership_date');
+
+        $member->save();
+        return response()->json([
+            'message'=>'create member succesfully',
+            'data'=>$member,
+        ]);
     }
 
     /**

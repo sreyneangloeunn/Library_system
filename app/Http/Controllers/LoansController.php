@@ -12,7 +12,7 @@ class LoansController extends Controller
      */
     public function index()
     {
-        //
+        return Loans::all();
     }
 
     /**
@@ -20,8 +20,22 @@ class LoansController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $loan = new Loans();
+        $loan->member_id = $request->input('member_id');
+        $loan->book_id = $request->input('book_id');
+        $loan->Loan_date = $request->input('loan_date');
+        $loan->due_date = $request->input('due_date');
+        $loan->return_date = $request->input('return_date');
+        $loan->status = $request->input('status');
+
+        $loan->save();
+        return response()->json([
+            "message"=>"Create succesfully",
+            "data"=>$loan,
+        ]);
+
     }
+
 
     /**
      * Display the specified resource.

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Loan;
 
 class Member extends Model
 {
@@ -14,7 +13,11 @@ class Member extends Model
 
     public function loan()
     {
-        return $this->hasMany(Loan::class);
+        return $this->hasMany(Loans::class);
     }
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }
 

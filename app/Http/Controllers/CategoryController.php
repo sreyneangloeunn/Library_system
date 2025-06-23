@@ -12,24 +12,44 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Category::all();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+   public function store(Request $request)
+{
+    $category = new Category();
+    $category->name = $request->input('name');
+    $category->save();
+
+    return response()->json([
+        'message' => 'Category created successfully.',
+        'data' => $category
+    ], 201);
+}
+
 
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show($id)
     {
-        //
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json([
+                "message" => "Category not found"
+            ], 404);
+        }
+
+        return response()->json([
+            "message" => "Show category",
+            "data" => $category,
+        ]);
     }
+
 
     /**
      * Update the specified resource in storage.
