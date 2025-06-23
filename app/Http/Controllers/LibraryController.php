@@ -12,7 +12,8 @@ class LibraryController extends Controller
      */
     public function index()
     {
-        //
+        $libraries = Library::all();
+        return response()->json($libraries);
     }
 
     /**
@@ -20,7 +21,14 @@ class LibraryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $library = Library::create($validated);
+        return response()->json($library, 201);
     }
 
     /**
@@ -28,7 +36,7 @@ class LibraryController extends Controller
      */
     public function show(Library $library)
     {
-        //
+        return response()->json($library);
     }
 
     /**
@@ -36,7 +44,14 @@ class LibraryController extends Controller
      */
     public function update(Request $request, Library $library)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'address' => 'sometimes|required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $library->update($validated);
+        return response()->json($library);
     }
 
     /**
@@ -44,6 +59,7 @@ class LibraryController extends Controller
      */
     public function destroy(Library $library)
     {
-        //
+        $library->delete();
+        return response()->json(['message' => 'Library deleted successfully.']);
     }
 }
