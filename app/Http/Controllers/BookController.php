@@ -12,7 +12,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        return Book::all();
     }
 
     /**
@@ -20,16 +20,44 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = new Book();
+        $book->title = $request->input('title');
+        $book->author = $request->input('author');
+        $book->isbn = $request->input('isbn');
+        $book->category_id = $request->input('category_id');
+        $book->library_id = $request->input('library_id'); 
+        $book->copies_available = $request->input('copies_available', 1); // optional
+
+        $book->save();
+
+        return response()->json([
+
+            'message' => 'Book created successfully.',
+            'data'=>$book
+
+        ]);
     }
+
 
     /**
      * Display the specified resource.
      */
-    public function show(Book $book)
-    {
-        //
+    public function show($id)
+{
+    $book = Book::find($id);
+
+    if (!$book) {
+        return response()->json([
+            "message" => "Book not found"
+        ], 404);
     }
+
+    return response()->json([
+        "message" => "Show book",
+        "data" => $book,
+    ]);
+}
+
 
     /**
      * Update the specified resource in storage.
