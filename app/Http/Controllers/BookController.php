@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
@@ -18,24 +20,15 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        $book = new Book();
-        $book->title = $request->input('title');
-        $book->author = $request->input('author');
-        $book->isbn = $request->input('isbn');
-        $book->category_id = $request->input('category_id');
-        $book->library_id = $request->input('library_id'); 
-        $book->copies_available = $request->input('copies_available', 1); // optional
+        $validated = $request->validated();
 
-        $book->save();
-
+        $book = Book::create($validated);
         return response()->json([
-
             'message' => 'Book created successfully.',
-            'data'=>$book
-
-        ]);
+            'data'    => $book
+        ], 201);
     }
 
 
@@ -43,41 +36,38 @@ class BookController extends Controller
      * Display the specified resource.
      */
     public function show($id)
-{
-    $book = Book::find($id);
+    {
+        $book = Book::find($id);
 
-    if (!$book) {
+        if (!$book) {
+            return response()->json([
+                "message" => "Book not found"
+            ], 404);
+        }
+
         return response()->json([
-            "message" => "Book not found"
-        ], 404);
+            "message" => "Show book",
+            "data" => $book,
+        ]);
     }
-
-    return response()->json([
-        "message" => "Show book",
-        "data" => $book,
-    ]);
-}
 
 
     /**
      * Update the specified resource in storage.
      */
-   public function update(Request $request, Book $book)
-{
-    $book->title = $request->input('title');
-    $book->author = $request->input('author');
-    $book->isbn = $request->input('isbn');
-    $book->category_id = $request->input('category_id');
-    $book->library_id = $request->input('library_id');
-    $book->copies_available = $request->input('copies_available', 1); // default to 1
+    public function update(UpdateBookRequest $request, Book $book)
+    {
+        $validated = $request->validated();
 
-    $book->save();
 
-    return response()->json([
-        'message' => 'Book updated successfully.',
-        'data' => $book
-    ]);
-}
+        $book->update($validated);
+
+        return response()->json([
+            'message' => 'Book updated successfully.',
+            'data'    => $book
+        ], 200);
+    }
+
 
 
 

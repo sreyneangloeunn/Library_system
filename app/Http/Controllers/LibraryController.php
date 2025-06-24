@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLibraryRequest;
+use App\Http\Requests\UpdateLibraryRequest;
 use App\Models\Library;
 use Illuminate\Http\Request;
 
@@ -19,16 +21,15 @@ class LibraryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLibraryRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-        ]);
+        $validated = $request->validated();
 
         $library = Library::create($validated);
-        return response()->json($library, 201);
+        return response()->json([
+            'message'=>'Library create  succes!',
+            'data'=> $library
+        ], 201);
     }
 
     /**
@@ -42,25 +43,12 @@ class LibraryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateLibraryRequest $request, Library $library)
 {
-    // Find the library by ID
-    $library = Library::find($id);
-
-    if (!$library) {
-        return response()->json(['message' => 'Library not found'], 404);
-    }
-
     // Validate the request
-    $validated = $request->validate([
-        'name'    => 'sometimes|required|string|max:255',
-        'address' => 'sometimes|required|string|max:255',
-        'phone'   => 'nullable|string|max:20',
-    ]);
+    $validated = $request->validated();
 
-    // Update only the existing library
-    $library->fill($validated);
-    $library->save();
+    $library->update($validated);
 
     return response()->json([
         'message' => 'Library updated successfully',

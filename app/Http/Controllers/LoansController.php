@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLoansRequest;
+use App\Http\Requests\UpdateLoansRequest;
 use App\Models\Loans;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 
 class LoansController extends Controller
@@ -18,17 +21,11 @@ class LoansController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLoansRequest $request )
     {
-        $loan = new Loans();
-        $loan->member_id = $request->input('member_id');
-        $loan->book_id = $request->input('book_id');
-        $loan->Loan_date = $request->input('loan_date');
-        $loan->due_date = $request->input('due_date');
-        $loan->return_date = $request->input('return_date');
-        $loan->status = $request->input('status');
+        $validated =$request->validated();
 
-        $loan->save();
+        $loan = Loans::create($validated);
         return response()->json([
             "message"=>"Create succesfully",
             "data"=>$loan,
@@ -54,21 +51,13 @@ class LoansController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Loans $loan)
+    public function update(UpdateLoansRequest $request, Loans $loan)
 {
     // Validate incoming request
-    $validated = $request->validate([
-        'member_id'    => 'required|exists:members,id',
-        'book_id'      => 'required|exists:books,id',
-        'loan_date'    => 'required|date',
-        'due_date'     => 'required|date|after_or_equal:loan_date',
-        'return_date'  => 'nullable|date|after_or_equal:loan_date',
-        'status'       => 'required|in:borrowed,returned,overdue',
-    ]);
+    $validated = $request->validated();
 
-    // Fill and save the loan
-    $loan->fill($validated);
-    $loan->save();
+
+    $loan->update($validated);
 
     return response()->json([
         'message' => 'Loan updated successfully',

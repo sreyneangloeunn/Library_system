@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateMemberRequest;
 use App\Models\Member;
 use Illuminate\Http\Request;
 
@@ -51,18 +52,12 @@ class MemberController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(Request $request, Member $member)
+    public function update(UpdateMemberRequest $request, Member $member)
     {
         // Validate incoming request
-        $validated = $request->validate([
-            'name'            => 'sometimes|required|string|max:255',
-            'email'           => 'sometimes|required|email|unique:members,email,' . $member->id,
-            'phone'           => 'sometimes|nullable|string|max:20',
-            'role'            => 'sometimes|nullable|string|max:50',
-            'membership_date' => 'sometimes|nullable|date',
-        ]);
+        $validated = $request->validated();
 
-        $member->fill($validated);
+        $member->update($validated);
         $member->save();
 
         return response()->json([

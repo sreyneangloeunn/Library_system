@@ -15,9 +15,18 @@ class Category extends Model
         return $this->hasMany(Book::class);
     }
 
-    protected $hidden=[
-        'created_at',
-        'updated_at',
-    ];
+    // protected $hidden=[
+    //     'created_at',
+    //     'updated_at',
+    // ];
+    // create attribute to clean date formate
+    public function getCreatedAtAttribute($value) {
+        return date('d-m-Y', strtotime($value));
+    }
+
+    // create attribute to clean date formate
+    public function getUpdatedAtAttribute($value) {
+        return date('d-m-Y', strtotime($value));
+    }
 }
 
