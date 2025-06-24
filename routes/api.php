@@ -31,11 +31,11 @@ Route::apiResource('loans', LoansController::class);
 Route::apiResource('members', MemberController::class);
 Route::apiResource('libraries', LibraryController::class);
 
-// Route::get('library', [LibraryController::class, 'index']);
-// Route::post('library', [LibraryController::class, 'store']);
-// Route::put('library/{id}', [LibraryController::class, 'update']);
-// Route::patch('library/{id}', [LibraryController::class, 'update']);
-// Route::delete('library/{id}', [LibraryController::class, 'destroy']);
+// Route::get('libraries', [LibraryController::class, 'index']);
+// Route::post('libraries', [LibraryController::class, 'store']);
+// Route::put('libraries/{id}', [LibraryController::class, 'update']);
+// Route::patch('libraries/{id}', [LibraryController::class, 'update']);
+// Route::delete('libraries/{id}', [LibraryController::class, 'destroy']);
 
 
 
