@@ -42,24 +42,43 @@ class LibraryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Library $library)
-    {
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'address' => 'sometimes|required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-        ]);
+    public function update(Request $request, $id)
+{
+    // Find the library by ID
+    $library = Library::find($id);
 
-        $library->update($validated);
-        return response()->json($library);
+    if (!$library) {
+        return response()->json(['message' => 'Library not found'], 404);
     }
+
+    // Validate the request
+    $validated = $request->validate([
+        'name'    => 'sometimes|required|string|max:255',
+        'address' => 'sometimes|required|string|max:255',
+        'phone'   => 'nullable|string|max:20',
+    ]);
+
+    // Update only the existing library
+    $library->fill($validated);
+    $library->save();
+
+    return response()->json([
+        'message' => 'Library updated successfully',
+        'data'    => $library,
+    ], 200);
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Library $library)
-    {
-        $library->delete();
-        return response()->json(['message' => 'Library deleted successfully.']);
-    }
+{
+    $library->delete();
+
+    return response()->json([
+        'message' => 'Library deleted successfully.',
+    ], 200);
+}
+
 }

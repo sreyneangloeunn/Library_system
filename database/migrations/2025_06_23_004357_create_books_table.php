@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('author');
             $table->string('isbn')->unique();
-            $table->unsignedInteger('copies_available')->default(1);
 
             $table->foreignId('library_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');

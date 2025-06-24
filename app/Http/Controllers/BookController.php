@@ -62,16 +62,34 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
-    {
-        //
-    }
+   public function update(Request $request, Book $book)
+{
+    $book->title = $request->input('title');
+    $book->author = $request->input('author');
+    $book->isbn = $request->input('isbn');
+    $book->category_id = $request->input('category_id');
+    $book->library_id = $request->input('library_id');
+    $book->copies_available = $request->input('copies_available', 1); // default to 1
+
+    $book->save();
+
+    return response()->json([
+        'message' => 'Book updated successfully.',
+        'data' => $book
+    ]);
+}
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return response()->json([
+            'message' => 'Book deleted successfully.'
+        ]);
     }
 }

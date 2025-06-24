@@ -40,24 +40,51 @@ class LoansController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Loans $loans)
+    public function show($id)
     {
-        //
+        $loan = Loans::find($id);
+        
+        return response()->json([
+        "message" => "Show loan",
+        "data" => $loan,
+        ]);
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Loans $loans)
-    {
-        //
-    }
+    public function update(Request $request, Loans $loan)
+{
+    // Validate incoming request
+    $validated = $request->validate([
+        'member_id'    => 'required|exists:members,id',
+        'book_id'      => 'required|exists:books,id',
+        'loan_date'    => 'required|date',
+        'due_date'     => 'required|date|after_or_equal:loan_date',
+        'return_date'  => 'nullable|date|after_or_equal:loan_date',
+        'status'       => 'required|in:borrowed,returned,overdue',
+    ]);
+
+    // Fill and save the loan
+    $loan->fill($validated);
+    $loan->save();
+
+    return response()->json([
+        'message' => 'Loan updated successfully',
+        'data'    => $loan,
+    ], 200);
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Loans $loans)
+    public function destroy(Loans $loan)
     {
-        //
+        $loan->delete();
+
+        return response()->json([
+            'message'=>'delete succesfully'
+        ]);
     }
 }
